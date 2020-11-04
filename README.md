@@ -370,6 +370,24 @@ change this line in `mix.exs`:
 defp elixirc_paths(:test), do: ["lib", "web", "test/support", "test/factories"]
 ```
 
+## Multi-tenant support
+
+If you are depending on query prefixes to switch between tenant schemas you can 
+pass `repo_options` to your factory which can be used to set the `:prefix` on your insert queries.
+This allows you to create a factory per tenant.
+
+```elixir
+defmodule MyApp.TenantFactory
+  use ExMachina.Ecto, repo: MyApp.Repo, repo_options: [prefix: "test_tenant"]
+
+  def user_factory do
+    ...
+  end
+
+  ...
+end
+```
+
 ## Custom Strategies
 
 You can use ExMachina without Ecto, by using just the `build` functions, or you

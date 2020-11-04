@@ -36,6 +36,22 @@ defmodule ExMachina.EctoTest do
       end
     end
 
+    defmodule MockRepo do
+      def insert!(_model, opts), do: opts
+    end
+
+    defmodule MockedTenantFactory do
+      use ExMachina.Ecto, repo: MockRepo, repo_options: [prefix: "test_tenant"]
+
+      def user_factory do
+        %ExMachina.User{}
+      end
+    end
+
+    test "it passes repo_options to Repo.insert!" do
+      assert [prefix: "test_tenant"] == MockedTenantFactory.insert(:user)
+    end
+
     test "params_for/1 still works as expected" do
       user_params = NoRepoTestFactory.params_for(:user)
 
